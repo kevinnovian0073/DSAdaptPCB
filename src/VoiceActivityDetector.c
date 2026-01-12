@@ -40,8 +40,8 @@ void vad_compute_calibration_threshold(VoiceActivityDetector *vad)
 void vad_update_threshold_after_speech(VoiceActivityDetector *vad)
 {
     vad->threshold *= 0.9f;  // Decay factor
-    if (vad->threshold < 0.005f)
-        vad->threshold = 0.005f;  // Minimum limit
+    if (vad->threshold < 0.018f)
+        vad->threshold = 0.018f;  // Minimum limit
 }
 
 // Perform VAD extraction with hangover

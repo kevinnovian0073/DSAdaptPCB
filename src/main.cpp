@@ -87,14 +87,12 @@ void saveLastFileIndex(int index)
     }
 }
 
-
 void onTimer(void *arg)
 {
     int16_t raw = (2048 - adc1_get_raw(ADC1_CHANNEL_4)) * 16;
 
     hpf_x[0] = (float)raw;
-    hpf_y[0] = hpf_b[0] * hpf_x[0] + hpf_b[1] * hpf_x[1] + hpf_b[2] * hpf_x[2]
-               - hpf_a[1] * hpf_y[1] - hpf_a[2] * hpf_y[2];
+    hpf_y[0] = hpf_b[0] * hpf_x[0] + hpf_b[1] * hpf_x[1] + hpf_b[2] * hpf_x[2] - hpf_a[1] * hpf_y[1] - hpf_a[2] * hpf_y[2];
 
     hpf_x[2] = hpf_x[1];
     hpf_x[1] = hpf_x[0];
@@ -102,8 +100,7 @@ void onTimer(void *arg)
     hpf_y[1] = hpf_y[0];
 
     x[0] = hpf_y[0];
-    y[0] = b[0] * x[0] + b[1] * x[1] + b[2] * x[2]
-           - a[1] * y[1] - a[2] * y[2];
+    y[0] = b[0] * x[0] + b[1] * x[1] + b[2] * x[2] - a[1] * y[1] - a[2] * y[2];
 
     x[2] = x[1];
     x[1] = x[0];
@@ -163,7 +160,8 @@ void setup()
     if (!SD.begin(SD_CS, spiSD))
     {
         Serial.println("SD Card Failed!");
-        while (1);
+        while (1)
+            ;
     }
 
     const esp_timer_create_args_t timer_args = {
@@ -171,7 +169,7 @@ void setup()
         .name = "sampling_timer"};
     esp_timer_create(&timer_args, &periodic_timer);
 
-    vad_init(&vad, 0.02f, SAMPLE_RATE / 50, 5);
+    vad_init(&vad, 0.020f, SAMPLE_RATE / 50, 5);
     vad_reset_calibration(&vad);
 
     Serial.println("Calibrating...");
@@ -184,8 +182,8 @@ void setup()
     esp_timer_stop(periodic_timer);
     isCalibrating = false;
 
-    Serial.print("Calibration Done. Threshold: ");
-    Serial.println(vad.threshold);
+    Serial.printf("Calibration done. Threshold: %.3f\n", vad.threshold);
+
     Serial.println("Ready to Record");
 }
 
@@ -271,8 +269,7 @@ void stopRecording()
 
             Serial.println("Saved VAD file: " + vad_filename);
             vad_update_threshold_after_speech(&vad);
-            Serial.print("Updated Threshold: ");
-            Serial.println(vad.threshold);
+            Serial.printf("Updated Threshold: %.3f\n", vad.threshold);
         }
     }
     else
