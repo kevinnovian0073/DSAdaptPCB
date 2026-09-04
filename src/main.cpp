@@ -6,17 +6,17 @@
 #include "VoiceActivityDetector.h"
 
 // --- Pin Definitions ---
-#define BUTTON_PIN 40
-#define ADC_MIC_PIN 5
+#define BUTTON_PIN 16
+#define ADC_MIC_PIN 32
 
 #if !defined(CONFIG_IDF_TARGET_ESP32)
 #define VSPI FSPI
 #endif
 
-#define SD_MISO 12
-#define SD_MOSI 11
-#define SD_SCK 10
-#define SD_CS 14
+#define SD_MISO 27
+#define SD_MOSI 25
+#define SD_SCK 26
+#define SD_CS 21
 
 #define SAMPLE_RATE 16000
 #define BUFFER_SIZE 512
@@ -286,7 +286,7 @@ void stopRecording()
 String getUniqueFilename()
 {
     int fileIndex = getLastFileIndex();
-    String name = "/Test050126Module_" + String(fileIndex) + ".wav";
+    String name = "/TestModule_" + String(fileIndex) + ".wav";
     saveLastFileIndex(fileIndex + 1);
     return name;
 }
